@@ -1,4 +1,5 @@
 import mongoose,{Schema,model,Model} from "mongoose";
+import { IProduct } from "../interfaces";
 
 const productSchema = new Schema({
     description: {type:String, required:true},
@@ -8,7 +9,7 @@ const productSchema = new Schema({
     sizes: [{
         type:String,
         enum:{
-            Values:['XS','S','M','L','XL','XXL','XXXL'],
+            values:['XS','S','M','L','XL','XXL','XXXL'],
             message:'{VALUE} no es permitido'
         }
     }],
@@ -18,14 +19,14 @@ const productSchema = new Schema({
     type: {
         type:String,
         enum:{
-            Values:['shirts','pants','hoodies','hats'],
+            values:['shirts','pants','hoodies','hats'],
             message:'{VALUE} no es permitido'
         }
     },
      gender: {
         type:String,
         enum:{
-            Values:['men','women','kid','unisex'],
+            values:['men','women','kid','unisex'],
             message:'{VALUE} no es permitido'
         }
     }
@@ -34,3 +35,7 @@ const productSchema = new Schema({
 });
 
 //TODO: Crear Indice de mongo
+
+const Product:Model<IProduct> = mongoose.models.Product || model('Product',productSchema)
+
+export default Product
