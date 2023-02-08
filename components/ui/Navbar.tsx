@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import NextLink from "next/link";
-import { AppBar, Badge, Box, Button, IconButton, Link, Toolbar, Typography } from "@mui/material"
+import { AppBar, Badge, Box, Button, IconButton, Input, InputAdornment, Link, Toolbar, Typography } from "@mui/material"
 import { SearchOutlined,ShoppingCartOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { UIContext } from "../../context";
@@ -44,8 +44,34 @@ export const Navbar = () => {
              </Box>
 
            <Box flex={1}/>
+           {/* pantalla desktop */}
+           {/* <IconButton>
+            <SearchOutlined/>
+           </IconButton> */}
 
-           <IconButton>
+              <Input 
+                        autoFocus
+                        value={searchTem}
+                        onChange={(e)=>setSearchTem(e.target.value)}
+                        onKeyPress={(e) =>e.key === 'Enter' ? onSearchTem() : null}
+                        type='text'
+                        placeholder="Buscar..."
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                onClick={onSearchTem}
+                                >
+                                 <SearchOutlined />
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                    />
+
+           {/* pantalla movil */}
+           <IconButton 
+             sx={{display:{xs:'flex' ,sm:'none'}}}
+             onClick={toggleSideMenu}
+             >
             <SearchOutlined/>
            </IconButton>
 
