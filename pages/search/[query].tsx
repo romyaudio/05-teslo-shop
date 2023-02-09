@@ -8,6 +8,7 @@ import { getProductsByTerm, getAllProducts } from '../../database/dbProducts';
 import { IProduct } from '../../interfaces/products';
 import { color } from '@mui/system';
 
+<<<<<<< HEAD
 interface Props {
   products : IProduct[]
   foundProducts:boolean
@@ -15,6 +16,10 @@ interface Props {
 }
 
 const SearchPage:NextPage<Props> = ({products,foundProducts,query}) => {
+=======
+const SearchPage = () => {
+    const {products,isLoading,isError} = useProducts('/products')
+>>>>>>> 3a14106018b88119f6b4d8cd8d3f7551198cc737
     
     return (
         <ShopLayout title="Teslo-Shop - Search" pageDescription={"Encuetra los mejores productos de teslo shop aqui"}>
