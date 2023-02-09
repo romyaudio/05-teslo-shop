@@ -1,7 +1,7 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import NextLink from "next/link";
 import { AppBar, Badge, Box, Button, IconButton, Input, InputAdornment, Link, Toolbar, Typography } from "@mui/material"
-import { SearchOutlined,ShoppingCartOutlined } from "@mui/icons-material";
+import { ClearAllOutlined, ClearOutlined, SearchOutlined,ShoppingCartOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { UIContext } from "../../context";
 
@@ -10,8 +10,19 @@ import { UIContext } from "../../context";
 export const Navbar = () => {
 
   const {toggleSideMenu} = useContext(UIContext)
+  const {asPath,push} = useRouter()
+  const [searchTem, setSearchTem] = useState('')
+  const [isSearchVisible, setIsSearVisible] = useState(false)
 
-  const {asPath} = useRouter()
+    const onSearchTem =()=>{
+        if(searchTem.trim().length === 0) return
+        push(`/search/${searchTem}`)
+    }
+
+    
+    
+
+  
   return (
     <AppBar>
         <Toolbar>
@@ -22,9 +33,9 @@ export const Navbar = () => {
              </Link>
            </NextLink>
 
-           <Box flex={1}/>
+           <Box flex={1} className="fadeIn"/>
 
-             <Box sx={{display:{xs:'none',sm:'block'}}}>
+             <Box sx={{display: isSearchVisible ? 'none' : {xs:'none',sm:'block'}}}>
                 <NextLink  href='/category/men' passHref legacyBehavior>
                     <Link>
                      <Button color={asPath === '/category/men' ? 'primary' : 'info'}>Hombres</Button>
@@ -45,11 +56,14 @@ export const Navbar = () => {
 
            <Box flex={1}/>
            {/* pantalla desktop */}
-           {/* <IconButton>
-            <SearchOutlined/>
-           </IconButton> */}
+           
 
-              <Input 
+           {
+            isSearchVisible
+             ? (
+              <Input    
+                       sx={{display:{ xs:'none',sm:'flex'}}}
+                        className="fadeIn"
                         autoFocus
                         value={searchTem}
                         onChange={(e)=>setSearchTem(e.target.value)}
@@ -59,13 +73,21 @@ export const Navbar = () => {
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
-                                onClick={onSearchTem}
+                                onClick={()=>setIsSearVisible(false)}
                                 >
-                                 <SearchOutlined />
+                                 <ClearOutlined />
                                 </IconButton>
                             </InputAdornment>
                         }
                     />
+             ):(
+             <IconButton onClick={()=>setIsSearVisible(true)} className="fadeIn" sx={{display:{ xs:'none',sm:'flex'}}}>
+               <SearchOutlined/>
+           </IconButton> 
+             )
+           }
+
+              
 
            {/* pantalla movil */}
            <IconButton 
