@@ -6,9 +6,9 @@ import { ShopLayout } from '../../components/layouts'
 import { ProductList } from '../../components/products'
 import { getProductsByTerm, getAllProducts } from '../../database/dbProducts';
 import { IProduct } from '../../interfaces/products';
-import { color } from '@mui/system';
 
-<<<<<<< HEAD
+
+
 interface Props {
   products : IProduct[]
   foundProducts:boolean
@@ -16,11 +16,7 @@ interface Props {
 }
 
 const SearchPage:NextPage<Props> = ({products,foundProducts,query}) => {
-=======
-const SearchPage = () => {
-    const {products,isLoading,isError} = useProducts('/products')
->>>>>>> 3a14106018b88119f6b4d8cd8d3f7551198cc737
-    
+
     return (
         <ShopLayout title="Teslo-Shop - Search" pageDescription={"Encuetra los mejores productos de teslo shop aqui"}>
            <Typography variant="h1" component='h1'>Buscar productos</Typography>
@@ -36,13 +32,8 @@ const SearchPage = () => {
                
                
            }
-           
-     
-          
                 <ProductList products={products} />
              
-     
-          
         </ShopLayout>
        )
 }
