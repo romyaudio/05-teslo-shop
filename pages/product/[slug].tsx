@@ -1,22 +1,35 @@
 import { Box, Button, Chip, Grid, Typography } from '@mui/material'
 import { NextPage ,GetServerSideProps,GetStaticPaths,GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 import { ShopLayout } from '../../components/layouts'
 import { ProductSlideShow, SizeSelector } from '../../components/products'
 import { ItemCounter } from '../../components/ui'
 import { getAllProductSlugs, getProductBySlug } from '../../database/dbProducts'
-import { IProduct } from '../../interfaces'
+import { ICartProduct, IProduct, ISize } from '../../interfaces'
 
 interface Props  {
   product : IProduct
+  
 }
 
 const ProductPage:NextPage<Props> = ({product}) => {
 
-  // const router = useRouter()
-  // const {products:product,isLoading} = useProducts(`/products/${router.query.slug}`)
+ const [temCartProduct,setTemCartProduct] = useState<ICartProduct>({
+  _id:product._id,
+    image:product.images[0], 
+    price:product.price, 
+    inStock:product.inStock,
+    size:undefined, 
+    slug:product.slug,
+    title:product.title,
+    gender:product.gender,
+    quantity:1
+ })
 
+ const selectedSize = (size:ISize)=>{
+  console.log('En Padre:',size)
+ }
   
 
   return(
@@ -44,6 +57,9 @@ const ProductPage:NextPage<Props> = ({product}) => {
             <SizeSelector
             //  selectedSize={product.sizes[3]} 
             sizes={product.sizes} 
+            selectedSize={temCartProduct.size}
+            onSelectedSize={(size)=>selectedSize(size)}
+            
             />
           </Box>
 
@@ -52,7 +68,11 @@ const ProductPage:NextPage<Props> = ({product}) => {
           {
             product.inStock >0 
              ? <Button color='secondary' className='circular-btn'>
-                 Agregar al carrito
+                 { temCartProduct.size
+                   ? 'Agregar al carrito'
+                   : 'Seleccione una talla'
+                   
+                 }
                </Button>
               : <Chip label='No hay disponibles' color='error' variant='outlined'/> 
           }
