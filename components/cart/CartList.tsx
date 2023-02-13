@@ -4,6 +4,8 @@ import { Box, Button, CardActionArea, CardMedia, Grid, Link, Typography } from "
 import { initialData } from "../../database/products"
 import { ItemCounter } from '../ui'
 import { CartContext } from '../../context';
+import Product from '../../models/Product';
+import { ICartProduct } from '../../interfaces';
 
 
 
@@ -14,7 +16,14 @@ interface Props {
 
 export const CartList:FC<Props> = ({editable = false}) => {
 
-  const {cart}=useContext(CartContext)
+  const {cart,updateCartQuantity}=useContext(CartContext)
+
+  const onUpdateCartQuantity =(Product:ICartProduct,newQuantityValue:number)=>{
+
+    Product.quantity = newQuantityValue
+    updateCartQuantity(Product)
+
+  }
 
 
 
@@ -51,7 +60,7 @@ export const CartList:FC<Props> = ({editable = false}) => {
                         ? <ItemCounter 
                         currentValue={product.quantity} 
                         maxValue={product.inStock} 
-                        updateQuantity={ () =>{} }/>
+                        updateQuantity={ (value) =>onUpdateCartQuantity(product,value) }/>
                         : <Typography variant='h6'>{product.quantity} {product.quantity >1 ? "productos" : "producto"}</Typography>
                       }
 

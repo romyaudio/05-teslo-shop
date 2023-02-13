@@ -23,9 +23,7 @@ export const CartProvider:FC<PropsWithChildren> = ({children}) =>{
     } catch (error) {
         dispatch({type: '[Cart] - LoadCart from cookies | storage',payload:[]})
     }
-
-     
-    
+  
    }, [])
    
 
@@ -54,7 +52,10 @@ export const CartProvider:FC<PropsWithChildren> = ({children}) =>{
 
         dispatch({type:'[Cart] - Update products in cart',payload:updateProducts})
     }
-
+   
+    const updateCartQuantity = (product:ICartProduct)=>{
+        dispatch({type:'[Cart] - Change cart quantity',payload:product})
+    }
    
 
     return (
@@ -62,6 +63,7 @@ export const CartProvider:FC<PropsWithChildren> = ({children}) =>{
             ...state,
             // methods
             addProductToCart,
+            updateCartQuantity,
             
         }}>
         {children}
