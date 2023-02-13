@@ -1,7 +1,7 @@
 import { Box, Button, Chip, Grid, Typography } from '@mui/material'
 import { NextPage ,GetServerSideProps,GetStaticPaths,GetStaticProps } from 'next'
-import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+
+import React, { useContext, useState } from 'react'
 import { ShopLayout } from '../../components/layouts'
 import { ProductSlideShow, SizeSelector } from '../../components/products'
 import { ItemCounter } from '../../components/ui'
@@ -14,6 +14,10 @@ interface Props  {
 }
 
 const ProductPage:NextPage<Props> = ({product}) => {
+
+  const route = useRouter()
+
+  const {addProductToCart} = useContext(CartContext)
 
  const [temCartProduct,setTemCartProduct] = useState<ICartProduct>({
   _id:product._id,
@@ -42,7 +46,11 @@ const ProductPage:NextPage<Props> = ({product}) => {
  }
 
  const onAddProduct = () =>{
-  console.log(( temCartProduct))
+
+  if(!temCartProduct.size){return}
+
+  addProductToCart( temCartProduct)
+  route.push('/cart')
  }
   
 
@@ -169,6 +177,8 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 //- The data can be publicly cached (not user-specific).
 //- The page must be pre-rendered (for SEO) and be very fast — getStaticProps generates HTML and JSON files, both of which can be cached by a CDN for performance.
 import {  } from 'next'
+import { useRouter } from 'next/router'
+import { CartContext } from '../../context'
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
   const { slug =''} = params as {slug:string}
