@@ -41,7 +41,7 @@ export const CartProvider:FC<PropsWithChildren> = ({children}) =>{
             tax: subTotal * taxRate ,
             total:subTotal * (taxRate + 1 ) 
         }
-        console.log(orderSummary)
+        
     }, [state.cart])
     
 
