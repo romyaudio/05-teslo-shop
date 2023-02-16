@@ -3,12 +3,21 @@ import { ICartProduct } from '../../interfaces'
 import { CartContext,cartReducer } from './'
 import Cookie from 'js-cookie'
 
+
 export interface CartState {
-    cart: ICartProduct[]
+    cart: ICartProduct[];
+    numberOfItems: number;
+    subTotal: number;
+    tax: number;
+    total:number;
 }
 
 const CART_INITIAL_STATE : CartState = {
-    cart:[]
+    cart:[],
+    numberOfItems: 0,
+      subTotal: 0,
+      tax: 0 ,
+      total:0 
 }
 
 export const CartProvider:FC<PropsWithChildren> = ({children}) =>{
@@ -41,6 +50,8 @@ export const CartProvider:FC<PropsWithChildren> = ({children}) =>{
             tax: subTotal * taxRate ,
             total:subTotal * (taxRate + 1 ) 
         }
+
+        dispatch({type:'[Cart] - Update cart summary',payload:orderSummary})
         
     }, [state.cart])
     
