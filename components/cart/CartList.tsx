@@ -1,11 +1,10 @@
 import NextLink from 'next/link'
 import { FC, useContext } from 'react';
 import { Box, Button, CardActionArea, CardMedia, Grid, Link, Typography } from "@mui/material"
-import { initialData } from "../../database/products"
 import { ItemCounter } from '../ui'
 import { CartContext } from '../../context';
-import Product from '../../models/Product';
 import { ICartProduct } from '../../interfaces';
+import { currency } from '../../utils';
 
 
 
@@ -69,7 +68,7 @@ export const CartList:FC<Props> = ({editable = false}) => {
 
                 </Grid>
                 <Grid item xs={2} display='flex' flexDirection='column' alignItems='center'>
-                    <Typography variant='subtitle1'>${product.price}</Typography>
+                    <Typography variant='subtitle1'>{currency.format(product.price)}</Typography>
 
                     {
                         editable && (
