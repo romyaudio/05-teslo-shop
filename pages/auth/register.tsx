@@ -38,18 +38,20 @@ const RegisterPage = () => {
     const {hasError,message} = await registerUser(name,email,password)
       
     if (hasError) {
-      setShowError(true)
-      setErrorMessage(message!)
-      setTimeout(() => setShowError(false), 3000);
-      return
-    }
-    router.replace('/')
 
-   }
+        setShowError(true)
+        setErrorMessage(message!)
+        setTimeout(() => setShowError(false), 3000);
+        return
+    }
+    const destination =  router.query.p?.toString() || '/'
+    router.replace(destination)
+
+    }
 
   return (
     <AuthLayout title={"Crear cuenta"}>
-       <form onSubmit={handleSubmit(onRegisteUser)}>
+    <form onSubmit={handleSubmit(onRegisteUser)}>
         <Box sx={{width:350, padding:'10px 20px'}}>
             <Grid container spacing={2}>
              <Grid item xs={12}>
@@ -116,7 +118,7 @@ const RegisterPage = () => {
              </Grid>
 
              <Grid item xs={12} display='flex' justifyContent="end">
-               <NextLink href='/auth/login' passHref legacyBehavior>
+               <NextLink href={router.query.p ? `/auth/login?p=${router.query.p}` : '/auth/login'} passHref legacyBehavior>
                 <Link underline="always">
                 Ya tiene cuenta? 
                 </Link>

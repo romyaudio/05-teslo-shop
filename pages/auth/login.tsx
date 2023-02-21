@@ -22,19 +22,22 @@ const LoginPage = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>();
 
   const [showError, setShowError] = useState(false)
-   
+  
   const onLoginUser = async({email,password}:FormData)=>{
 
-     setShowError(false)
+  setShowError(false)
 
-     const isValidLogin = await loginUser(email,password)
-     if(!isValidLogin){
-      setShowError(true)
-      setTimeout(() => setShowError(false), 3000);
-      return
-     }
+    const isValidLogin = await loginUser(email,password)
+    
+    if(!isValidLogin){
+    setShowError(true)
+    setTimeout(() => setShowError(false), 3000);
+    return
 
-     router.replace('/')
+    }
+
+    const destination =  router.query.p?.toString() || '/'
+    router.replace(destination)
 
   }
 
@@ -93,7 +96,7 @@ const LoginPage = () => {
              </Grid>
 
              <Grid item xs={12} display='flex' justifyContent="end">
-               <NextLink href='/auth/register' passHref legacyBehavior>
+               <NextLink href={router.query.p ? `/auth/register?p=${router.query.p}` : '/auth/register'} passHref legacyBehavior>
                 <Link underline="always">
                 No tiene cuenta? 
                 </Link>

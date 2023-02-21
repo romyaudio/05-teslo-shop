@@ -1,13 +1,15 @@
 import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from "@mui/material"
 import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, LoginOutlined, MaleOutlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
 import { useContext, useState } from "react"
-import { UIContext } from "../../context"
+import { AuthContext, UIContext } from "../../context"
 import { useRouter } from "next/router"
 
 
 export const SideMenu = () => {
 
     const {isMenuOpen,toggleSideMenu} = useContext(UIContext)
+
+    const {isLoggedIn,user,logout} = useContext(AuthContext)
 
     const [searchTem, setSearchTem] = useState('')
 
@@ -19,16 +21,16 @@ export const SideMenu = () => {
 
     const router = useRouter()
     const navigateTo = (url:string) =>{
-         
-        
 
         router.push(url)
 
         toggleSideMenu()
 
-
     }
-  return (
+
+
+
+    return (
     <Drawer
         open={ isMenuOpen}
         anchor='right'
@@ -48,23 +50,27 @@ export const SideMenu = () => {
                         type='text'
                         placeholder="Buscar..."
                         endAdornment={
-                            <InputAdornment position="end">
+                        <InputAdornment position="end">
                                 <IconButton
                                 onClick={onSearchTem}
                                 >
-                                 <SearchOutlined />
+                                <SearchOutlined />
                                 </IconButton>
-                            </InputAdornment>
+                        </InputAdornment>
                         }
                     />
                 </ListItem>
 
+                {
+                    isLoggedIn && (
+                <>
+                        
                 <ListItem button>
                     <ListItemIcon>
                         <AccountCircleOutlined/>
-                    </ListItemIcon>
-                    <ListItemText primary={'Perfil'} />
-                </ListItem>
+                        </ListItemIcon>
+                        <ListItemText primary={'Perfil'} />
+                    </ListItem>
 
                 <ListItem button>
                     <ListItemIcon>
@@ -72,6 +78,12 @@ export const SideMenu = () => {
                     </ListItemIcon>
                     <ListItemText primary={'Mis Ordenes'} />
                 </ListItem>
+                        
+                </>
+                    )
+                }
+
+                
 
 
                 <ListItem button sx={{ display: { xs: '', sm: 'none' } }} onClick={()=> navigateTo('/category/men')}>
@@ -95,45 +107,62 @@ export const SideMenu = () => {
                     <ListItemText primary={'Niños'} />
                 </ListItem>
 
+                {
 
-                <ListItem button>
-                    <ListItemIcon>
-                        <VpnKeyOutlined/>
-                    </ListItemIcon>
-                    <ListItemText primary={'Ingresar'} />
-                </ListItem>
-
-                <ListItem button>
-                    <ListItemIcon>
+                    isLoggedIn 
+                    ? (
+                        <ListItem button onClick={logout}>
+                        <ListItemIcon>
                         <LoginOutlined/>
-                    </ListItemIcon>
-                    <ListItemText primary={'Salir'} />
-                </ListItem>
+                        </ListItemIcon>
+                        <ListItemText primary={'Salir'} />
+                        </ListItem>
+                        ) 
+                    :   (
+                        <ListItem button onClick={()=> navigateTo(`/auth/login?p=${router.asPath}`)}>
+                        <ListItemIcon>
+                        <VpnKeyOutlined/>
+                        </ListItemIcon>
+                        <ListItemText primary={'Ingresar'} />
+                        </ListItem>  
+                        )
+                }
+                
+
+                
 
 
-                {/* Admin */}
-                <Divider />
-                <ListSubheader>Admin Panel</ListSubheader>
+                {
+                    user?.role === 'admin' && (
+                    <>
+                        <Divider />
+                        <ListSubheader>Admin Panel</ListSubheader>
 
-                <ListItem button>
-                    <ListItemIcon>
-                        <CategoryOutlined/>
-                    </ListItemIcon>
-                    <ListItemText primary={'Productos'} />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>
-                        <ConfirmationNumberOutlined/>
-                    </ListItemIcon>
-                    <ListItemText primary={'Ordenes'} />
-                </ListItem>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <CategoryOutlined/>
+                            </ListItemIcon>
+                            <ListItemText primary={'Productos'} />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <ConfirmationNumberOutlined/>
+                            </ListItemIcon>
+                            <ListItemText primary={'Ordenes'} />
+                        </ListItem>
 
-                <ListItem button>
-                    <ListItemIcon>
-                        <AdminPanelSettings/>
-                    </ListItemIcon>
-                    <ListItemText primary={'Usuarios'} />
-                </ListItem>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <AdminPanelSettings/>
+                            </ListItemIcon>
+                            <ListItemText primary={'Usuarios'} />
+                        </ListItem>
+                        
+                        </>
+                    )
+                }
+                
+                
             </List>
         </Box>
     </Drawer>
