@@ -3,9 +3,17 @@ import { Button, Card, CardContent, Divider, Grid, Link, Typography } from "@mui
 import { Box } from "@mui/system"
 import { CartList, OrderSummary } from "../../components/cart"
 import { ShopLayout } from "../../components/layouts"
+import { useContext } from 'react'
+import { CartContext } from '../../context'
 
 
 const SummaryPage = () => {
+
+  const {shippingAddress,numberOfItems} = useContext(CartContext)
+  if(!shippingAddress){
+    return <></>
+  }
+  const {FistName,LastName,address,address2 = '',zipCode,city,country,phone} = shippingAddress
   return (
     <ShopLayout title="Resumen de orden" pageDescription="resumen de la orden">
        <Typography variant="h1" component='h1'>Resumen de la orden</Typography>
@@ -18,7 +26,7 @@ const SummaryPage = () => {
         <Grid item xs={12} sm={5}>
           <Card className="summary-card">
             <CardContent>
-                <Typography variant="h2">Resumen de la orden (3 Items)</Typography>
+                <Typography variant="h2">Resumen de la orden ({numberOfItems})</Typography>
                 <Divider sx={{my:1}}/>
 
                 <Box display='flex' justifyContent='space-between'>
@@ -31,12 +39,13 @@ const SummaryPage = () => {
                 </Box>
 
                 
-                <Typography >Romy Rodriguez</Typography>
-                <Typography >500 Virginia Av</Typography>
-                <Typography >Towson</Typography>
+                <Typography >{FistName} {LastName}</Typography>
+                <Typography >{address}</Typography>
+                <Typography >{city}</Typography>
                 <Typography >Md</Typography>
-                <Typography >21286</Typography>
-                <Typography >410-501-4324</Typography>
+                <Typography >{zipCode}</Typography>
+                <Typography >{country}</Typography>
+                <Typography >{phone}</Typography>
 
                 <Divider sx={{my:1}}/>
 

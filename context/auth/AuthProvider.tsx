@@ -99,6 +99,14 @@ export const AuthProvider:FC<PropsWithChildren>= ({children})=>{
     const logout =()=>{
         Cookies.remove('token')
         Cookies.remove('cart')
+        Cookies.remove('FistName')
+        Cookies.remove('LastName')
+        Cookies.remove('address')
+        Cookies.remove('address2',)
+        Cookies.remove('city')  
+        Cookies.remove('country')
+        Cookies.remove('zipCode')
+        Cookies.remove('phone') 
         router.reload()
     }
 

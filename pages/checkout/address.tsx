@@ -5,6 +5,8 @@ import { countries } from "../../utils/countries"
 import { useForm } from "react-hook-form"
 import Cookies from "js-cookie"
 import { useRouter } from "next/router"
+import { useContext } from "react"
+import { CartContext } from "../../context"
 
 type FormData = {
    FistName  :string
@@ -17,34 +19,33 @@ type FormData = {
    phone     :string
 }
 
+   const getAddressCookies = ():FormData=>{
+   return {
+      FistName:Cookies.get('FistName') || '',
+      LastName:Cookies.get('LastName') || '',
+      address:Cookies.get('address') || '',
+      address2:Cookies.get('address2') || '',
+      city:Cookies.get('city') || '',
+      country:Cookies.get('country') || '',
+      zipCode:Cookies.get('zipCode') || '',
+      phone:Cookies.get('phone') || '',
+   }
+   }
+
    const AddressPage = () => {
-   const router = useRouter()   
+   const router = useRouter()
+   const {updateAddress}= useContext(CartContext)   
 
    const {register,handleSubmit,watch,formState:{errors}} = useForm<FormData>({
-      defaultValues:{
-      FistName:'',
-      LastName:'',
-      address:'',
-      address2:'',
-      city:'',
-      country:'',
-      zipCode:'',
-      phone:'',
-      }
+      defaultValues:getAddressCookies()
       
    })
 
    const onSubmitAddress = (data:FormData) => {
-      console.log({data})
-      Cookies.set('FistName',data.FistName)
-      Cookies.set('LastName',data.LastName)
-      Cookies.set('address',data.address)
-      Cookies.set('address2',data.address2 || '')
-      Cookies.set('country',data.country)
-      Cookies.set('zipCode',data.zipCode)
-      Cookies.set('phone',data.phone)
-
-      router.push('checkout/summary')
+      
+      
+      updateAddress(data)
+      router.push('/checkout/summary')
    }
 
    return (
@@ -127,7 +128,7 @@ type FormData = {
                <TextField
                select 
                variant="filled"
-               defaultValue={countries[6].code}
+               defaultValue={Cookies.get('country') || countries[6].name}
                {...register('country',
                         { required:'El campo es obligatorio'}
                   )}
@@ -139,7 +140,7 @@ type FormData = {
                   countries.map(country =>(
                   <MenuItem
                   key={country.code} 
-                  value={country.code}>
+                  value={country.name}>
                   {country.name}
                   </MenuItem>
 
