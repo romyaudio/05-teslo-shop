@@ -11,22 +11,20 @@ import { useProducts } from "../hooks";
 
 
 export default function Home() {
-  
 
- const {products,isLoading,isError} = useProducts('/products')
+const {products,isLoading,isError} = useProducts('/products')
 
   return (
-   <ShopLayout title="Teslo-Shop - Home" pageDescription={"Encuetra los mejores productos de teslo shop aqui"}>
+    <ShopLayout title="Teslo-Shop - Home" pageDescription={"Encuetra los mejores productos de teslo shop aqui"}>
       <Typography variant="h1" component='h1'>Tienda</Typography>
       <Typography variant="h2" sx={{mb:1}}>Todos los productos</Typography>
 
         {
           isLoading
-           ? <FullScreenLoading/>
-           : <ProductList products={products} />
+            ? <FullScreenLoading/>
+            : <ProductList products={products} />
         }
 
-     
-   </ShopLayout>
+    </ShopLayout>
   )
 }

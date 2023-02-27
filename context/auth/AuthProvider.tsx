@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import {FC ,PropsWithChildren,useEffect,useReducer} from 'react'
 import { tesloApi } from '../../api'
@@ -23,19 +24,30 @@ export const AuthProvider:FC<PropsWithChildren>= ({children})=>{
 
     const router = useRouter()
 
+    const {data,status} = useSession()
 
     useEffect(() => {
-        checkToken()
-    
-        return () => {
-        
+        if (status === 'authenticated') {
+            console.log({user:data?.user})
+            //dispatch({type:'[AUTH] - Login',payload:data?.user as IUser})
         }
-    }, [])
+    
+    }, [status,data])
+    
+
+
+    // useEffect(() => {
+    //     checkToken()
+    
+    //     return () => {
+        
+    //     }
+    // }, [])
 
     const checkToken = async() =>{
         if(!Cookies.get('token'))return
         try {
-           const {data} = await tesloApi.get('/user/validete-token')
+            const {data} = await tesloApi.get('/user/validete-token')
 
         const {token,user}=data
 
@@ -46,30 +58,29 @@ export const AuthProvider:FC<PropsWithChildren>= ({children})=>{
             Cookies.remove('token')
         }
         
-       
     }
     
 
 
 
-   const loginUser = async(email:string,password:string):Promise<boolean>=>{
-      try {
-         const {data} = await tesloApi.post('/user/login',{email,password})
+    const loginUser = async(email:string,password:string):Promise<boolean>=>{
+        try {
+            const {data} = await tesloApi.post('/user/login',{email,password})
 
-         const {token,user}=data
+            const {token,user}=data
 
-         Cookies.set('token',token)
-         dispatch({type:'[AUTH] - Login',payload:user})
-         return true
+            Cookies.set('token',token)
+            dispatch({type:'[AUTH] - Login',payload:user})
+            return true
 
-      } catch (error) {
+        } catch (error) {
         return false
-      }
-   }
+        }
+    }
 
-   const registerUser = async (name:string,email:string,password:string):Promise<{hasError:boolean;message?:string}> => {
+    const registerUser = async (name:string,email:string,password:string):Promise<{hasError:boolean;message?:string}> => {
 
-       try {
+        try {
 
         const {data} = await tesloApi.post('/user/register',{name,email,password})
 
@@ -81,19 +92,19 @@ export const AuthProvider:FC<PropsWithChildren>= ({children})=>{
             hasError:false
         }
         
-       } catch (error) {
-         if(axios.isAxiosError(error)) {
+        } catch (error) {
+            if(axios.isAxiosError(error)) {
             return {
                 hasError:true,
                 message:error.response?.data.message
+                }
             }
-         }
-         return {
+            return {
             hasError:true,
             message: 'No se pudo crear el usario intente de nuevo'
-         }
-       }
-   }
+        }
+        } 
+    }
     
 
     const logout =()=>{
@@ -119,6 +130,6 @@ export const AuthProvider:FC<PropsWithChildren>= ({children})=>{
     }}>
         {children}
     </AuthContext.Provider>
-   )
-   
+    )
+
 }
