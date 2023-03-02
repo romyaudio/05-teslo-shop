@@ -2,21 +2,30 @@
 
 import NextAuth,{NextAuthOptions} from "next-auth"
 import GithubProvider from "next-auth/providers/github"
-import Credentials from "next-auth/providers/credentials"
+import CredentialsProvider from "next-auth/providers/credentials"
+import { dbUsers } from "../../../database";
+
+declare module "next-auth" {
+  interface Session {
+    accessToken?: string;
+   
+  }
+}
 export const authOptions:NextAuthOptions = {
   // Configure one or more authentication providers
     providers: [
     
     // ...add more providers here
-    Credentials({
+    CredentialsProvider({
       name: 'Custom Login',
       credentials: {
           email:{label:'correo',type: 'email',placeholder:'correo@google.com '},
           password:{label:'Password',type: 'password',placeholder:'Contrasena'},
       },
-    async authorize(credentials){
+     async authorize(credentials,req) {
         console.log(credentials)
-      return {name:'romy',email:'romy@google.com',role:'admin'}
+      
+      return await dbUsers.checkEmailPassword(credentials!.email,credentials!.password)
     }
     }),
 
@@ -34,6 +43,7 @@ export const authOptions:NextAuthOptions = {
 
             switch (account.type) {
               case 'oauth':
+                await dbUsers.oAuthToDbUser(user?.email || '',user?.name || '')
                 break
               case 'credentials':
                 token.user = user
@@ -45,7 +55,7 @@ export const authOptions:NextAuthOptions = {
       },
         async session({session,token,user}){
           
-          session.accessToken = token.accessToken
+          session.accessToken = token.accessToken as any
           session.user = token.user as any
           return session
       }
