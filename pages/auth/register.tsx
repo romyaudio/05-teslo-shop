@@ -2,6 +2,9 @@ import { ErrorOutline } from "@mui/icons-material";
 import { Button, Chip, Grid, Link, TextField, Typography } from "@mui/material"
 import { Box } from "@mui/system"
 import { set } from "mongoose";
+import { GetServerSideProps } from "next";
+import { getServerSession } from "next-auth/next";
+import { signIn } from "next-auth/react";
 
 import NextLink from 'next/link';
 import { useRouter } from "next/router";
@@ -11,6 +14,7 @@ import { useForm } from "react-hook-form"
 import { AuthLayout } from "../../components/layouts"
 import { AuthContext } from "../../context";
 import { validations } from "../../utils";
+import { authOptions } from "../api/auth/[...nextauth]";
 
 type FormData = {
   name:string
@@ -44,8 +48,10 @@ const RegisterPage = () => {
         setTimeout(() => setShowError(false), 3000);
         return
     }
-    const destination =  router.query.p?.toString() || '/'
-    router.replace(destination)
+    // const destination =  router.query.p?.toString() || '/'
+    // router.replace(destination)
+
+    await signIn('credentials',{email,password})
 
     }
 
@@ -134,3 +140,21 @@ const RegisterPage = () => {
 }
 
 export default RegisterPage
+
+export const getServerSideProps: GetServerSideProps = async ({req,res,query}) => {
+  const {p ='/'} = query
+  const session = await getServerSession(req, res, authOptions)
+  if (session) {
+    return {
+      redirect:{
+        destination: p.toLocaleString(),
+        permanent: false,
+      }
+    }
+  }
+  return {
+    props: {
+      
+    }
+  }
+}
