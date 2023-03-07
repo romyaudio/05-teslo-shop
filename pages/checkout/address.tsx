@@ -5,7 +5,7 @@ import { countries } from "../../utils/countries"
 import { useForm } from "react-hook-form"
 import Cookies from "js-cookie"
 import { useRouter } from "next/router"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { CartContext } from "../../context"
 
 type FormData = {
@@ -36,10 +36,27 @@ type FormData = {
    const router = useRouter()
    const {updateAddress}= useContext(CartContext)   
 
-   const {register,handleSubmit,watch,formState:{errors}} = useForm<FormData>({
-      defaultValues:getAddressCookies()
+   const {register,handleSubmit,watch,formState:{errors},reset} = useForm<FormData>({
+      defaultValues:{
+         FistName: '',
+         LastName: '',
+         address: '',
+         address2:'',
+         city:'',
+         country:Cookies.get('country') || '',
+         zipCode: '',
+         phone:'',
+   
+      }
       
    })
+
+   useEffect(() => {
+     reset(getAddressCookies())
+   
+     
+   }, [reset])
+   
 
    const onSubmitAddress = (data:FormData) => {
       
@@ -124,11 +141,12 @@ type FormData = {
                />
             </Grid>
             <Grid item xs={12}sm={6}>
-            <FormControl fullWidth> 
+            {/* <FormControl fullWidth>  */}
                <TextField
-               select 
+                
                variant="filled"
-               defaultValue={Cookies.get('country') || countries[6].name}
+               fullWidth
+               //defaultValue={Cookies.get('country') || countries[6].name}
                {...register('country',
                         { required:'El campo es obligatorio'}
                   )}
@@ -137,19 +155,19 @@ type FormData = {
                >
                {
                
-                  countries.map(country =>(
-                  <MenuItem
-                  key={country.code} 
-                  value={country.name}>
-                  {country.name}
-                  </MenuItem>
+                  // countries.map(country =>(
+                  // <MenuItem
+                  // key={country.code} 
+                  // value={country.name}>
+                  // {country.name}
+                  // </MenuItem>
 
-                  ) )
+                  // ) )
                
                }
                
                </TextField>
-            </FormControl>
+            {/* </FormControl> */}
          </Grid>
          <Grid item xs={12}sm={6}>
             <TextField 

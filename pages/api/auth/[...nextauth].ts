@@ -19,11 +19,11 @@ export const authOptions:NextAuthOptions = {
     CredentialsProvider({
       name: 'Custom Login',
       credentials: {
-          email:{label:'correo',type: 'email',placeholder:'correo@google.com '},
+          email:{label:'Corroe',type: 'email',placeholder:'correo@google.com '},
           password:{label:'Password',type: 'password',placeholder:'Contrasena'},
       },
-     async authorize(credentials,req) {
-        console.log(credentials)
+     async authorize(credentials) {
+        
       
       return await dbUsers.checkEmailPassword(credentials!.email,credentials!.password)
     }
@@ -51,10 +51,10 @@ export const authOptions:NextAuthOptions = {
         async jwt({token,account,user}){
           if(account){
             token.accessToken = account.access_token
-
+             
             switch (account.type) {
               case 'oauth':
-                await dbUsers.oAuthToDbUser(user?.email || '',user?.name || '')
+               token.user = await dbUsers.oAuthToDbUser(user?.email || '',user?.name || '')
                 break
               case 'credentials':
                 token.user = user

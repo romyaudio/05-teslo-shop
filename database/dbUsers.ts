@@ -32,7 +32,7 @@ export const oAuthToDbUser = async (oAuthEmail:string,oAuthName:string) =>{
     const user = await User.findOne({email:oAuthEmail})
 
     if (user) {
-        
+       await db.disconnect() 
         const {_id,email,name,role} = user
         return {_id,email,name,role}
     }
