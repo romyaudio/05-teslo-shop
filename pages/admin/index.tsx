@@ -45,7 +45,7 @@ const DashboardPage = () => {
     } = data!
 
     return (
-        <AdminLayout title={'Dashboard'} subTitle={'Estadistica generales '} icon={<DashboardOutlined />}>
+        <AdminLayout title={'Dashboard'} subTitle={'Estadística generales '} icon={<DashboardOutlined />}>
             <Grid container spacing={3}>
                 <SummaryTitle title={numberOfOrders} subTitle={'Ordenes totales'} icon={<CreditCardOutlined color='secondary' sx={{ fontSize: 40 }} />} />
                 <SummaryTitle title={paidOrders} subTitle={'Ordenes pagadas'} icon={<AttachMoneyOutlined color='success' sx={{ fontSize: 40 }} />} />
@@ -54,7 +54,7 @@ const DashboardPage = () => {
                 <SummaryTitle title={numberOfProducts} subTitle={'Productos'} icon={<CategoryOutlined color='warning' sx={{ fontSize: 40 }} />} />
                 <SummaryTitle title={productsWithNoInventory} subTitle={'Productos sin existencias'} icon={<CancelPresentationOutlined color='error' sx={{ fontSize: 40 }} />} />
                 <SummaryTitle title={lowInventory} subTitle={'Bajo inventario'} icon={<ProductionQuantityLimitsOutlined color='warning' sx={{ fontSize: 40 }} />} />
-                <SummaryTitle title={refreshIn} subTitle={'Actualizacion en:'} icon={<AccessTimeOutlined color='secondary' sx={{ fontSize: 40 }} />} />
+                <SummaryTitle title={refreshIn} subTitle={'Actualización en:'} icon={<AccessTimeOutlined color='secondary' sx={{ fontSize: 40 }} />} />
             </Grid>
         </AdminLayout>
     )

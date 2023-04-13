@@ -2,9 +2,17 @@ import { db } from "."
 import { User } from "../models"
 import bcrypt from "bcryptjs"
 
+interface User {
+
+    id: string;
+    email: string;
+    role: string;
+    name: string;
+}
 
 
-export const checkEmailPassword = async (email: string, password: string) => {
+
+export const checkEmailPassword = async (email: string, password: string): Promise<User | null> => {
     await db.connect()
     const user = await User.findOne({ email })
     await db.disconnect()
@@ -20,7 +28,7 @@ export const checkEmailPassword = async (email: string, password: string) => {
     const { role, name, _id } = user
 
     return {
-        _id,
+        id: _id,
         email: email.toLocaleLowerCase(),
         role,
         name

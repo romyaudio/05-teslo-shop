@@ -1,6 +1,6 @@
 
 
-import NextAuth, { NextAuthOptions } from "next-auth"
+import NextAuth, { NextAuthOptions, User } from "next-auth"
 import GithubProvider from "next-auth/providers/github"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { dbUsers } from "../../../database";
@@ -11,7 +11,9 @@ declare module "next-auth" {
     accessToken?: string;
 
   }
+
 }
+
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [

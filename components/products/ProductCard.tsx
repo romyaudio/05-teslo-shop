@@ -7,63 +7,63 @@ import { currency } from '../../utils';
 
 
 interface Props {
-    product: IProduct
+  product: IProduct
 }
 
-export const ProductCard:FC<Props> = ({product}) => {
-  
+export const ProductCard: FC<Props> = ({ product }) => {
+
   const [isHovered, setIsHovered] = useState(false)
   const [isImageloaded, setIsImageLoaded] = useState(false)
 
   const productImage = useMemo(() => {
-     return isHovered
-     ? `/products/${product.images[1]}`
-     : `/products/${product.images[0]}`
+    return isHovered
+      ? product.images[1]
+      : product.images[0]
   },
 
-   [isHovered,product.images])
+    [isHovered, product.images])
 
   return (
     <Grid item xs={6} sm={4}
-     onMouseEnter={()=>setIsHovered(true)}
-     onMouseLeave={()=>setIsHovered(false)}
-     >
-              <Card>
-                <NextLink href={`/product/${product.slug}`} passHref legacyBehavior prefetch={false}>
-                  <Link>
-                   <CardActionArea>
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <Card>
+        <NextLink href={`/product/${product.slug}`} passHref legacyBehavior prefetch={false}>
+          <Link>
+            <CardActionArea>
 
-                    {
-                      (product.inStock ===0 ) && (
-                        <Chip
-                      color='primary'
-                      label="Out Store"
-                      sx={{position:'absolute',zIndex:99,top:'10px',left:'10px'}}
-                      />
-                      )
-                    }
-                    
-                    <CardMedia
-                     component={'img'}
-                     image={productImage}
-                     className='fadeIn'
-                     alt={product.title}
-                     onLoad={()=>setIsImageLoaded(true)}
-                    />
+              {
+                (product.inStock === 0) && (
+                  <Chip
+                    color='primary'
+                    label="Out Store"
+                    sx={{ position: 'absolute', zIndex: 99, top: '10px', left: '10px' }}
+                  />
+                )
+              }
 
-                   </CardActionArea>
-                  </Link>
-                </NextLink>
-                
+              <CardMedia
+                component={'img'}
+                image={productImage}
+                className='fadeIn'
+                alt={product.title}
+                onLoad={() => setIsImageLoaded(true)}
+              />
 
-              </Card>
+            </CardActionArea>
+          </Link>
+        </NextLink>
 
-              <Box sx={{mt:1, display : isImageloaded ? 'block' : 'none'}} className='fadeIn'>
-                <Typography fontWeight={700}>{product.title}</Typography>
-                <Typography fontWeight={500}>{currency.format(product.price)}</Typography>
 
-              </Box>
+      </Card>
 
-            </Grid>
+      <Box sx={{ mt: 1, display: isImageloaded ? 'block' : 'none' }} className='fadeIn'>
+        <Typography fontWeight={700}>{product.title}</Typography>
+        <Typography fontWeight={500}>{currency.format(product.price)}</Typography>
+
+      </Box>
+
+    </Grid>
   )
 }

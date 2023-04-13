@@ -6,38 +6,42 @@ import { Product } from '../../../models'
 type Data = {
   message: string
 }
-| IProduct
+  | IProduct
 
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
 
-   switch (req.method) {
+  switch (req.method) {
     case "GET":
-        return getProductBySlug(req,res)
-        
-       
-   
+      return getProductBySlug(req, res)
+
+
+
     default:
-       return res.status(400).json({message:'Bad request'})
-   }
+      return res.status(400).json({ message: 'Bad request' })
+  }
 
-  
+
 }
-async function getProductBySlug(req: NextApiRequest,res: NextApiResponse<Data>) {
-    
-    await db.connect()
+async function getProductBySlug(req: NextApiRequest, res: NextApiResponse<Data>) {
 
-    const {slug} = req.query
-    const product = await Product.findOne({slug}).lean()
-    await db.disconnect()
+  await db.connect()
 
-    if (!product) {
-        return res.status(404).json({message:'Producto no encotrado'})
-        
-    }
+  const { slug } = req.query
+  const product = await Product.findOne({ slug }).lean()
+  await db.disconnect()
 
-    return res.json(product)
+  if (!product) {
+    return res.status(404).json({ message: 'Producto no encotrado' })
+
+  }
+
+  product.images = product.images.map(image => {
+    return image.includes('http') ? image : `${process.env.HOST_NAME}products/${image}`
+  })
+
+  return res.json(product)
 }
 
